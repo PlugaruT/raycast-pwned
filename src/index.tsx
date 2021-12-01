@@ -1,4 +1,4 @@
-import { Detail, showToast, ToastStyle, List } from "@raycast/api";
+import { Detail, showToast, ToastStyle, List, ActionPanel, OpenInBrowserAction, Icon, Color } from "@raycast/api";
 import axios from "axios";
 import { useState } from "react";
 import crypto from "crypto";
@@ -8,7 +8,6 @@ interface Hash {
   count: number;
   match: boolean;
 }
-
 
 interface Props {
   hashes?: Hash[];
@@ -25,7 +24,7 @@ export default function Command() {
   const [props, setProps] = useState<Props>({});
 
 
-  return <List isLoading={!props.hashes} onSearchTextChange={(text) => {
+  return <List isLoading={!props.hashes} throttle={true} onSearchTextChange={(text) => {
     const passwordHash = sha1(text).toUpperCase();
     const passwordPrefix = passwordHash.substring(0, 5).toUpperCase();
     const passwordSuffix = passwordHash.substring(5).toUpperCase();
@@ -47,10 +46,21 @@ export default function Command() {
           }
         });
         setProps({ hashes: hashes });
+      }).catch(error => {
+        showToast(ToastStyle.Failure, `Error: ${error.message}`);
       });
   }}>
     {props.hashes?.map((hash) => (
-      <List.Item title={hash.suffix + " " + hash.count} key={hash.suffix} subtitle={hash.match ? "match" : "not match"} />
+      <List.Item
+        title={hash.suffix}
+        key={hash.suffix}
+        icon={{ source: hash.match ? Icon.XmarkCircle : Icon.Circle, tintColor: hash.match ? Color.Red : Color.SecondaryText }}
+        accessoryTitle={hash.match ? `Password is compromised. There are ${hash.count} appearances` : ""}
+        actions={
+          <ActionPanel title="Actions">
+            <OpenInBrowserAction url="https://haveibeenpwned.com" />
+          </ActionPanel>
+        } />
     ))}
   </List>;
 }
