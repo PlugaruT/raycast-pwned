@@ -1,6 +1,6 @@
 <p align="center">
-  <img src="assets/icon.png" alt="Icon" />
-</p>
+  <img src="assets/icon.png" alt="Icon" width="128" height="128" />
+</p><br>
 
 # Raycast Search ';--have i been pwned?
 
