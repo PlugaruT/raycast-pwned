@@ -1,7 +1,7 @@
-import { Detail, showToast, ToastStyle, List, ActionPanel, OpenInBrowserAction, Icon, Color } from "@raycast/api";
+import { ActionPanel, Color, Icon, List, OpenInBrowserAction, showToast, ToastStyle } from "@raycast/api";
 import axios from "axios";
-import { useState } from "react";
 import crypto from "crypto";
+import { useState } from "react";
 
 interface Hash {
   suffix: string;
